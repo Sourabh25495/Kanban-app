@@ -48,6 +48,7 @@ export const useStyles = makeStyles((theme) => ({
     paddingRight: 10
   },
   textField: {
+    width: 700,
     backgroundColor: "#F0F8FF"
   },
   formLayout: {

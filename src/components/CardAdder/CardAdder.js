@@ -1,14 +1,19 @@
 import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
-import {useStyles, ColorButton} from '../../styles'
+import {useStyles, ColorButton} from '../../styles';
 
 
 export const CardAdder = ({handleAddNewTask}) => {
   const [newTask, setNewTask] = useState('')
   const [disable, setDisable] = useState(true)
   
+  const [showAlert, setShowAlert] = useState(false)
+  const [message, setMessage] = useState()
+  
   const handleClick = () => {
     handleAddNewTask(newTask)
+    setShowAlert(true)
+    setMessage("Task Added!!")
     setNewTask('')
     setDisable(true)
   }
