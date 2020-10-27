@@ -60,14 +60,14 @@ class Kanban extends React.Component {
         <div className={classes.board}>
           {channels.map((channel, index) => (
             <>
-              <KanbanColumn status={channel}>
+              <KanbanColumn status={channel} >
                 <div className={classes.column}>
                   <div className={classes.columnHead}><b>{labelsMap[channel]}</b></div>
                   <div>
                     {Array.isArray(tasks) && tasks
                       .filter(item => item.status === channel)
                       .map(item => (
-                        <KanbanItem id={item._id} onDrop={this.update}>
+                        <KanbanItem id={item._id} onDrop={this.update} key={item}>
                           <div className={classes.item}>
                             <div className={classes.titleLayout}>{item.title}</div>
                             <div className={classes.deleteButtonContainer}>
