@@ -34,3 +34,12 @@ You can find instructions and source code for `KanbanDB` [here on Github](https:
 BONUS: A card can be edited and saved (`.updateCard()`).
 
 Note: This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+
+### Implementation:
+
+I have implemented the Kanban board with the Add and Delete functionality.
+
+To run the application, please `npm i` followed by `npm start`. 
+
+Thanks

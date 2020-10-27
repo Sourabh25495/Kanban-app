@@ -12,13 +12,15 @@ import {CardAdder} from '../CardAdder';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import KanbanDB from 'kanbandb/dist/KanbanDB';
 
 
 class Kanban extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks: []
+      tasks: [],
+      updatedTasks: []
     };
     this.addNewTask = this.addNewTask.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -26,12 +28,44 @@ class Kanban extends React.Component {
   
   componentDidMount() {
     const currentTasks = tasks
+    const that = this;
+    KanbanDB.connect().then(function ready(db, dbInstanceId) {
+      currentTasks.map(currentTask => {
+        db.addCard({name: currentTask.name, status: currentTask.status})
+          .then(() => {
+            console.log("Cards added")
+          })
+          .catch(err => console.error(err.message));
+      })
+      
+      db.getCards()
+        .then((currentTasks) => {
+            that.setState({updatedTasks: currentTasks})
+          }
+        ).catch(err => console.error(err.message));
+      
+    })
     this.setState({tasks: currentTasks})
   }
   
   addNewTask(newTask) {
     const {tasks} = this.state;
-    const currentlyAddedTask = [...tasks, ...[{_id: uuidv4(), title: newTask, status: 'Todo'}]]
+    const that = this;
+    const currentlyAddedTask = [...tasks, ...[{_id: uuidv4(), name: newTask, status: 'Todo'}]]
+    KanbanDB.connect().then(function ready(db, dbInstanceId) {
+      db.addCard({name: newTask, status: 'Todo'})
+        .then(() => {
+        })
+        .catch(err => console.error(err.message));
+      
+      db.getCards()
+        .then((cardList) => {
+            that.setState({updatedTasks: currentlyAddedTask})
+          }
+        ).catch(err => console.error(err.message));
+      
+      
+    })
     this.setState({tasks: currentlyAddedTask})
   }
   
@@ -57,36 +91,36 @@ class Kanban extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.boardContainer}>
-        <div className={classes.board}>
-          {channels.map((channel, index) => (
-            <>
-              <KanbanColumn status={channel} >
-                <div className={classes.column}>
-                  <div className={classes.columnHead}><b>{labelsMap[channel]}</b></div>
-                  <div>
-                    {Array.isArray(tasks) && tasks
-                      .filter(item => item.status === channel)
-                      .map(item => (
-                        <KanbanItem id={item._id} onDrop={this.update} key={item}>
-                          <div className={classes.item}>
-                            <div className={classes.titleLayout}>{item.title}</div>
-                            <div className={classes.deleteButtonContainer}>
-                              <IconButton
-                                className={classes.margin}
-                                onClick={(e) => this.handleDelete(e, item)}>
-                                <DeleteIcon fontSize="small" />
-                              </IconButton>
+          <div className={classes.board}>
+            {channels.map((channel, index) => (
+              <>
+                <KanbanColumn status={channel}>
+                  <div className={classes.column}>
+                    <div className={classes.columnHead}><b>{labelsMap[channel]}</b></div>
+                    <div>
+                      {Array.isArray(tasks) && tasks
+                        .filter(item => item.status === channel)
+                        .map(item => (
+                          <KanbanItem id={item._id} onDrop={this.update} key={item}>
+                            <div className={classes.item}>
+                              <div className={classes.titleLayout}>{item.name}</div>
+                              <div className={classes.deleteButtonContainer}>
+                                <IconButton
+                                  className={classes.margin}
+                                  onClick={(e) => this.handleDelete(e, item)}>
+                                  <DeleteIcon fontSize="small"/>
+                                </IconButton>
+                              </div>
                             </div>
-                          </div>
-                        </KanbanItem>
-                      ))}
+                          </KanbanItem>
+                        ))}
+                    </div>
                   </div>
-                </div>
-              </KanbanColumn>
-              {index !== channels.length - 1 && <Divider orientation="vertical" flexItem/>}
-            </>
-          ))}
-        </div>
+                </KanbanColumn>
+                {index !== channels.length - 1 && <Divider orientation="vertical" flexItem/>}
+              </>
+            ))}
+          </div>
         </div>
         <div className={classes.formPanel}>
           <CardAdder handleAddNewTask={this.addNewTask}/>
@@ -97,4 +131,3 @@ class Kanban extends React.Component {
 }
 
 export default DragDropContext(HTML5Backend)(withStyles(useStyle)(Kanban));
-
