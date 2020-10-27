@@ -74,7 +74,7 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: 'white',
     padding: 17,
     borderRadius: 5,
-    boxShadow: "0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)",
+    boxShadow: "0 14px 28px rgba(0,0,0,0.29), 0 10px 10px rgba(0,0,0,0.22)",
   },
   buttonColor: {
     color: 'white',
