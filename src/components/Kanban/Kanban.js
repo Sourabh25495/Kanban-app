@@ -12,6 +12,7 @@ import {CardAdder} from '../CardAdder';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import KanbanDB from 'kanbandb/dist/KanbanDB';
 
 
 class Kanban extends React.Component {
@@ -26,34 +27,75 @@ class Kanban extends React.Component {
   
   componentDidMount() {
     const currentTasks = tasks
-    this.setState({tasks: currentTasks})
+    const that = this;
+    KanbanDB.connect().then(function ready(db, dbInstanceId) {
+      currentTasks.map(currentTask => {
+      db.addCard({ name: currentTask.title, status: currentTask.status })
+        .then(() => {})
+        .catch(err => console.error(err.message));
+      })
+      
+      db.getCards()
+        .then((cardList) =>
+          that.setState({tasks: cardList})
+        ).catch(err => console.error(err.message));;
+    })
   }
+  
   
   addNewTask(newTask) {
     const {tasks} = this.state;
-    const currentlyAddedTask = [...tasks, ...[{_id: uuidv4(), title: newTask, status: 'Todo'}]]
+    const that = this;
+    const currentlyAddedTask = [...tasks, ...[{_id: uuidv4(), name: newTask, status: 'Todo'}]]
+   
+    KanbanDB.connect().then(function ready(db, dbInstanceId) {
+      db.addCard({ name: newTask, status: 'Todo' })
+        .then(() => {})
+        .catch(err => console.error(err.message));
+      
+      db.getCards()
+        .then((cardList) => {
+            that.setState({tasks: currentlyAddedTask})
+          }
+        ).catch(err => console.error(err.message));;
+      
+    })
     this.setState({tasks: currentlyAddedTask})
   }
   
   handleDelete(e, item) {
-    this.setState({tasks: this.state.tasks.filter(itemToDelete => itemToDelete._id !== item._id)})
+    const that = this;
+    KanbanDB.connect().then(function ready(db, dbInstanceId) {
+    
+      db.getCards()
+        .then(() => {
+          console.log("Card deleted")
+          }
+        ).catch(err => console.error(err.message));;
+    
+    })
+    console.log("Work", tasks)
+    this.setState({tasks: this.state.tasks.filter(itemToDelete => itemToDelete.id !== item.id)})
   }
   
   update = (id, status) => {
     const {tasks} = this.state;
+    console.log("Tasksssss", tasks)
     const task = tasks.find(task => task._id === id);
+   
     task.status = status;
     const taskIndex = tasks.indexOf(task);
     const newTasks = update(tasks, {
       [taskIndex]: {$set: task}
     });
+    console.log("TASK Force", newTasks)
     this.setState({tasks: newTasks});
   };
   
   render() {
     const {tasks} = this.state;
     const {classes} = this.props;
-    
+   
     return (
       <div className={classes.root}>
         <div className={classes.boardContainer}>
@@ -69,7 +111,7 @@ class Kanban extends React.Component {
                       .map(item => (
                         <KanbanItem id={item._id} onDrop={this.update} key={item}>
                           <div className={classes.item}>
-                            <div className={classes.titleLayout}>{item.title}</div>
+                            <div className={classes.titleLayout}>{item.name}</div>
                             <div className={classes.deleteButtonContainer}>
                               <IconButton
                                 className={classes.margin}
