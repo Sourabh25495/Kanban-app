@@ -56,8 +56,8 @@ class Kanban extends React.Component {
     
     return (
       <div className={classes.root}>
+        <div className={classes.boardContainer}>
         <div className={classes.board}>
-          
           {channels.map((channel, index) => (
             <>
               <KanbanColumn status={channel}>
@@ -78,8 +78,6 @@ class Kanban extends React.Component {
                               </IconButton>
                             </div>
                           </div>
-                        
-                        
                         </KanbanItem>
                       ))}
                   </div>
@@ -89,7 +87,8 @@ class Kanban extends React.Component {
             </>
           ))}
         </div>
-        <div>
+        </div>
+        <div className={classes.formPanel}>
           <CardAdder handleAddNewTask={this.addNewTask}/>
         </div>
       </div>

@@ -4,8 +4,12 @@ import Button from "@material-ui/core/Button";
 
 export const useStyle = (() => ({
   root: {
-    backgroundColor: '#F0F8FF',
     width: '100%',
+  },
+  boardContainer: {
+    width: '100%',
+    minHeight: '100%',
+    backgroundColor: '#F0F8FF',
   },
   board: {
     display: "inline-flex",
@@ -16,7 +20,7 @@ export const useStyle = (() => ({
   column: {
     minWidth: 400,
     width: "28vw",
-    height: "80vh",
+    height: "92vh",
     margin: "0 auto",
   },
   columnHead: {
@@ -28,7 +32,7 @@ export const useStyle = (() => ({
   item: {
     padding: 8,
     margin: 25,
-    height: "10vh",
+    minHeight: "10vh",
     textAlign: "left",
     borderRadius: 4,
     fontSize: "1.4em",
@@ -44,6 +48,9 @@ export const useStyle = (() => ({
   },
   deleteButtonContainer: {
     float: 'right'
+  },
+  formPanel: {
+    marginTop: -45
   }
 }));
 
