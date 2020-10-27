@@ -36,6 +36,7 @@ export const CardAdder = ({handleAddNewTask}) => {
           variant="outlined"
           onChange={textChangeHandler}
           onBlur={handleTextChange}
+          className={classes.textField}
           placeholder="e.g.: Bug: Text Poll not dispatching half stars"
           InputProps={{
             disableUnderline: true
