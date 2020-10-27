@@ -3,7 +3,6 @@ import TextField from '@material-ui/core/TextField';
 import {useStyles, ColorButton} from '../../styles'
 
 
-
 export const CardAdder = ({handleAddNewTask}) => {
   const [newTask, setNewTask] = useState('')
   const [disable, setDisable] = useState(true)
@@ -19,10 +18,10 @@ export const CardAdder = ({handleAddNewTask}) => {
   }
   
   const textChangeHandler = (e) => {
-    if(e.target.value.length > 0) {
+    if (e.target.value.length > 0) {
       setDisable(false);
     }
-    if(e.target.value.length === 0)
+    if (e.target.value.length === 0)
       setDisable(true);
   }
   
@@ -34,6 +33,7 @@ export const CardAdder = ({handleAddNewTask}) => {
         <TextField
           id="outlined-basic"
           variant="outlined"
+          value={newTask}
           onChange={textChangeHandler}
           onBlur={handleTextChange}
           className={classes.textField}
