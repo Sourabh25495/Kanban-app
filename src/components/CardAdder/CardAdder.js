@@ -33,7 +33,6 @@ export const CardAdder = ({handleAddNewTask}) => {
         <TextField
           id="outlined-basic"
           variant="outlined"
-          value={newTask}
           onChange={textChangeHandler}
           onBlur={handleTextChange}
           className={classes.textField}
