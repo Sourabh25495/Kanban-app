@@ -5,15 +5,10 @@ import {useStyles, ColorButton} from '../../styles';
 
 export const CardAdder = ({handleAddNewTask}) => {
   const [newTask, setNewTask] = useState('')
-  const [disable, setDisable] = useState(true)
-  
-  const [showAlert, setShowAlert] = useState(false)
-  const [message, setMessage] = useState()
+  const [disable, setDisable] = useState(true);
   
   const handleClick = () => {
     handleAddNewTask(newTask)
-    setShowAlert(true)
-    setMessage("Task Added!!")
     setNewTask('')
     setDisable(true)
   }
@@ -23,6 +18,7 @@ export const CardAdder = ({handleAddNewTask}) => {
   }
   
   const textChangeHandler = (e) => {
+    setNewTask(e.target.value)
     if (e.target.value.length > 0) {
       setDisable(false);
     }
@@ -39,6 +35,7 @@ export const CardAdder = ({handleAddNewTask}) => {
           id="outlined-basic"
           variant="outlined"
           onChange={textChangeHandler}
+          value={newTask}
           onBlur={handleTextChange}
           className={classes.textField}
           placeholder="e.g.: Bug: Text Poll not dispatching half stars"
