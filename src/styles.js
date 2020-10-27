@@ -5,11 +5,13 @@ import Button from "@material-ui/core/Button";
 export const useStyle = (() => ({
   root: {
     width: '100%',
+    zIndex:100
   },
   boardContainer: {
     width: '100%',
     minHeight: '100%',
     backgroundColor: '#F0F8FF',
+    zIndex:100
   },
   board: {
     display: "inline-flex",
@@ -40,7 +42,8 @@ export const useStyle = (() => ({
     backgroundColor: "white",
     boxShadow: "0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)",
     overflowY: "scroll",
-    overflowX: "auto"
+    overflowX: "auto",
+    
   },
   titleLayout: {
     height: 70,
@@ -50,7 +53,8 @@ export const useStyle = (() => ({
     float: 'right'
   },
   formPanel: {
-    marginTop: -45
+    marginTop: -45,
+    zIndex: 10
   }
 }));
 
