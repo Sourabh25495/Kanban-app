@@ -38,6 +38,13 @@ export const useStyle = (() => ({
     overflowY: "scroll",
     overflowX: "auto"
   },
+  titleLayout: {
+    height: 70,
+    fontFamily: 'Arial'
+  },
+  deleteButtonContainer: {
+    float: 'right'
+  }
 }));
 
 

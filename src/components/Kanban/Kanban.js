@@ -1,6 +1,6 @@
 import React from "react";
 import {DragDropContext} from "react-dnd";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import HTML5Backend from "react-dnd-html5-backend";
 import {withStyles} from "@material-ui/core/styles";
 import update from "immutability-helper";
@@ -10,6 +10,8 @@ import {useStyle} from '../../styles'
 import {labelsMap, channels, tasks} from '../../constants'
 import {CardAdder} from '../CardAdder';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 class Kanban extends React.Component {
@@ -66,18 +68,24 @@ class Kanban extends React.Component {
                       .filter(item => item.status === channel)
                       .map(item => (
                         <KanbanItem id={item._id} onDrop={this.update}>
-                          <div className={classes.item}>{item.title}</div>
-                          <button
-                            onClick={(e) => this.handleDelete(e, item)}
-                          >
-                            delete
-                          </button>
+                          <div className={classes.item}>
+                            <div className={classes.titleLayout}>{item.title}</div>
+                            <div className={classes.deleteButtonContainer}>
+                              <IconButton
+                                className={classes.margin}
+                                onClick={(e) => this.handleDelete(e, item)}>
+                                <DeleteIcon fontSize="small" />
+                              </IconButton>
+                            </div>
+                          </div>
+                        
+                        
                         </KanbanItem>
                       ))}
                   </div>
                 </div>
               </KanbanColumn>
-              {index !== channels.length - 1 && <Divider style={{paddingBottom: 200}} orientation="vertical" flexItem/>}
+              {index !== channels.length - 1 && <Divider orientation="vertical" flexItem/>}
             </>
           ))}
         </div>
