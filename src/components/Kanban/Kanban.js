@@ -1,5 +1,6 @@
 import React from "react";
 import {DragDropContext} from "react-dnd";
+import { v4 as uuidv4 } from 'uuid';
 import HTML5Backend from "react-dnd-html5-backend";
 import {withStyles} from "@material-ui/core/styles";
 import update from "immutability-helper";
@@ -11,19 +12,29 @@ import {CardAdder} from '../CardAdder';
 import Divider from '@material-ui/core/Divider';
 
 
-
 class Kanban extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks
+      tasks: []
     };
-    this.addNewTask = this.addNewTask.bind(this)
+    this.addNewTask = this.addNewTask.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+  
+  componentDidMount() {
+    const currentTasks = tasks
+    this.setState({tasks: currentTasks})
   }
   
   addNewTask(newTask) {
-    tasks.push({_id: tasks.length + 1, title: newTask, status: 'Todo'})
-    this.setState({tasks: tasks})
+    const {tasks} = this.state;
+    const currentlyAddedTask = [...tasks, ...[{_id: uuidv4(), title: newTask, status: 'Todo'}]]
+    this.setState({tasks: currentlyAddedTask})
+  }
+  
+  handleDelete(e, item) {
+    this.setState({tasks: this.state.tasks.filter(itemToDelete => itemToDelete._id !== item._id)})
   }
   
   update = (id, status) => {
@@ -40,6 +51,7 @@ class Kanban extends React.Component {
   render() {
     const {tasks} = this.state;
     const {classes} = this.props;
+    
     return (
       <div className={classes.root}>
         <div className={classes.board}>
@@ -50,17 +62,22 @@ class Kanban extends React.Component {
                 <div className={classes.column}>
                   <div className={classes.columnHead}><b>{labelsMap[channel]}</b></div>
                   <div>
-                    {tasks
+                    {Array.isArray(tasks) && tasks
                       .filter(item => item.status === channel)
                       .map(item => (
                         <KanbanItem id={item._id} onDrop={this.update}>
                           <div className={classes.item}>{item.title}</div>
+                          <button
+                            onClick={(e) => this.handleDelete(e, item)}
+                          >
+                            delete
+                          </button>
                         </KanbanItem>
                       ))}
                   </div>
                 </div>
               </KanbanColumn>
-              {index !== channels.length - 1 && <Divider style={{paddingBottom: 200}} orientation="vertical" flexItem />}
+              {index !== channels.length - 1 && <Divider style={{paddingBottom: 200}} orientation="vertical" flexItem/>}
             </>
           ))}
         </div>
