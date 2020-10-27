@@ -28,6 +28,14 @@ class Kanban extends React.Component {
     this.state = {
       tasks
     };
+    this.addNewTask = this.addNewTask.bind(this)
+  }
+  
+  addNewTask(newTask) {
+    console.log("MYNew Task", newTask)
+    tasks.push({_id: tasks.length + 1, title: newTask, status: 'Todo'})
+    console.log("Task", tasks)
+    this.setState({tasks: tasks})
   }
   
   update = (id, status) => {
@@ -63,7 +71,7 @@ class Kanban extends React.Component {
             </KanbanColumn>
           ))}
         </section>
-        <CardAdder/>
+        <CardAdder handleAddNewTask={this.addNewTask}/>
       </div>
     );
   }
