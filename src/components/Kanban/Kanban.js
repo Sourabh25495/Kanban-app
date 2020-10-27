@@ -70,7 +70,6 @@ class Kanban extends React.Component {
   }
   
   handleDelete(e, item) {
-    console.log("Item to delete", this.state.tasks.filter(itemToDelete => itemToDelete.id !== item.id), item, this.state.tasks)
     this.setState({tasks: this.state.tasks.filter(itemToDelete => itemToDelete._id !== item._id)})
   }
   
