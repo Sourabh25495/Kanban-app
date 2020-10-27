@@ -1,25 +1,15 @@
 import React from "react";
-import {DragDropContext, DragSource} from "react-dnd";
+import {DragDropContext} from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
+import {withStyles} from "@material-ui/core/styles";
 import update from "immutability-helper";
 import KanbanColumn from './KanbanColumns'
 import KanbanItem from './KanbanItem'
-import {classes} from '../../styles'
-import {labelsMap, channels} from '../../constants'
-import {CardAdder} from '../CardAdder'
+import {useStyle} from '../../styles'
+import {labelsMap, channels, tasks} from '../../constants'
+import {CardAdder} from '../CardAdder';
+import Divider from '@material-ui/core/Divider';
 
-const tasks = [
-  {_id: 1, title: "First Task", status: "Todo"},
-  {_id: 2, title: "Second Task", status: "Todo"},
-  {_id: 3, title: "Third Task", status: "In-Progress"},
-  {_id: 4, title: "Fourth Task", status: "In-Progress"},
-  {_id: 5, title: "Fifth Task", status: "In-Progress"},
-  {_id: 6, title: "Sixth Task", status: "In-Progress"},
-  {_id: 7, title: "Seventh Task", status: "review"},
-  {_id: 8, title: "Eighth Task", status: "review"},
-  {_id: 9, title: "Ninth Task", status: "done"},
-  {_id: 10, title: "Tenth Task", status: "done"}
-];
 
 
 class Kanban extends React.Component {
@@ -32,9 +22,7 @@ class Kanban extends React.Component {
   }
   
   addNewTask(newTask) {
-    console.log("MYNew Task", newTask)
     tasks.push({_id: tasks.length + 1, title: newTask, status: 'Todo'})
-    console.log("Task", tasks)
     this.setState({tasks: tasks})
   }
   
@@ -51,31 +39,38 @@ class Kanban extends React.Component {
   
   render() {
     const {tasks} = this.state;
+    const {classes} = this.props;
     return (
-      <div>
-        <section style={classes.board}>
-          {channels.map(channel => (
-            <KanbanColumn status={channel}>
-              <div style={classes.column}>
-                <div style={classes.columnHead}>{labelsMap[channel]}</div>
-                <div>
-                  {tasks
-                    .filter(item => item.status === channel)
-                    .map(item => (
-                      <KanbanItem id={item._id} onDrop={this.update}>
-                        <div style={classes.item}>{item.title}</div>
-                      </KanbanItem>
-                    ))}
+      <div className={classes.root}>
+        <div className={classes.board}>
+          
+          {channels.map((channel, index) => (
+            <>
+              <KanbanColumn status={channel}>
+                <div className={classes.column}>
+                  <div className={classes.columnHead}><b>{labelsMap[channel]}</b></div>
+                  <div>
+                    {tasks
+                      .filter(item => item.status === channel)
+                      .map(item => (
+                        <KanbanItem id={item._id} onDrop={this.update}>
+                          <div className={classes.item}>{item.title}</div>
+                        </KanbanItem>
+                      ))}
+                  </div>
                 </div>
-              </div>
-            </KanbanColumn>
+              </KanbanColumn>
+              {index !== channels.length - 1 && <Divider style={{paddingBottom: 200}} orientation="vertical" flexItem />}
+            </>
           ))}
-        </section>
-        <CardAdder handleAddNewTask={this.addNewTask}/>
+        </div>
+        <div>
+          <CardAdder handleAddNewTask={this.addNewTask}/>
+        </div>
       </div>
     );
   }
 }
 
-export default DragDropContext(HTML5Backend)(Kanban);
+export default DragDropContext(HTML5Backend)(withStyles(useStyle)(Kanban));
 

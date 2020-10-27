@@ -1,39 +1,61 @@
 import React, {useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import {useStyles, ColorButton} from '../../styles'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
-}));
+
 
 export const CardAdder = ({handleAddNewTask}) => {
   const [newTask, setNewTask] = useState('')
+  const [disable, setDisable] = useState(true)
   
   const handleClick = () => {
     handleAddNewTask(newTask)
     setNewTask('')
+    setDisable(true)
   }
   
+  const handleTextChange = (e) => {
+    setNewTask(e.target.value)
+  }
+  
+  const textChangeHandler = (e) => {
+    if(e.target.value.length > 0) {
+      setDisable(false);
+    }
+    if(e.target.value.length === 0)
+      setDisable(true);
+  }
+  
+  const classes = useStyles();
+  
   return (
-    <main style={{padding: -3, display: 'inline-flex'}}>
-      <div style={{width: 600, marginLeft: 40, paddingRight: 10}}>
+    <div className={classes.formLayout}>
+      <div className={classes.formContainer}>
         <TextField
           id="outlined-basic"
           variant="outlined"
-          onBlur={e => setNewTask(e.target.value)}
+          onChange={textChangeHandler}
+          onBlur={handleTextChange}
+          placeholder="e.g.: Bug: Text Poll not dispatching half stars"
+          InputProps={{
+            disableUnderline: true
+          }}
+          inputProps={{
+            maxLength: 100
+          }}
           fullWidth
         />
       </div>
-      <Button variant="contained" color="primary" onClick={handleClick}>
-        Primary
-      </Button>
-    </main>
+      <ColorButton
+        variant="outlined"
+        onClick={handleClick}
+        color="primary"
+        disabled={disable}
+        fullWidth
+      >
+        <b className={classes.buttonColor}>Add New</b>
+      </ColorButton>
+    </div>
   )
 }
 

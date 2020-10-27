@@ -20,9 +20,9 @@ function App() {
   
   return (
     <div className="App">
-      <header>
+      <div>
         <Kanban/>
-      </header>
+      </div>
     </div>
   );
 }
